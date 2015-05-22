@@ -71,6 +71,9 @@ class MainWindow(QtGui.QMainWindow):
         self.menuBar().addMenu(fileMenu)
 
         viewMenu = QtGui.QMenu("&View", self)
+        refreshAction = viewMenu.addAction("&Refresh")
+        refreshAction.setShortcut("Ctrl+R")
+
         self.backgroundAction = viewMenu.addAction("&Background")
         self.backgroundAction.setEnabled(False)
         self.backgroundAction.setCheckable(True)
@@ -118,6 +121,7 @@ class MainWindow(QtGui.QMainWindow):
         openAction.triggered.connect(self.openFile)
         quitAction.triggered.connect(QtGui.qApp.quit)
         rendererGroup.triggered.connect(self.setRenderer)
+        refreshAction.triggered.connect(self.refresh)
 
         self.setCentralWidget(self.view)
         self.setWindowTitle("SVG Viewer")
@@ -160,6 +164,9 @@ class MainWindow(QtGui.QMainWindow):
                 self.view.setRenderer(SvgView.OpenGL)
         elif action == self.imageAction:
             self.view.setRenderer(SvgView.Image)
+    
+    def refresh(self):
+        self.openFile(self.currentPath)
 
 
 class SvgView(QtGui.QGraphicsView):
@@ -294,6 +301,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         window.openFile(sys.argv[1])
     else:
-        window.openFile('o.svg')
+        window.openFile('s1.svg')
     window.show()
     sys.exit(app.exec_())
