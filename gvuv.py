@@ -53,18 +53,22 @@ import sip
 sip.setapi('QString', 2)
 
 from PyQt4 import QtCore, QtGui, QtOpenGL, QtSvg
+from gvgen import gvgen
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
         self.currentPath = ''
+        self.dotPath = None
 
         self.view = SvgView()
 
         fileMenu = QtGui.QMenu("&File", self)
         openAction = fileMenu.addAction("&Open...")
         openAction.setShortcut("Ctrl+O")
+        openDotAction = fileMenu.addAction("Open &Dot Graph...")
+        openDotAction.setShortcut("Ctrl+D")
         quitAction = fileMenu.addAction("E&xit")
         quitAction.setShortcut("Ctrl+Q")
 
@@ -119,6 +123,7 @@ class MainWindow(QtGui.QMainWindow):
         self.menuBar().addMenu(rendererMenu)
 
         openAction.triggered.connect(self.openFile)
+        openDotAction.triggered.connect(self.openDotFile)
         quitAction.triggered.connect(QtGui.qApp.quit)
         rendererGroup.triggered.connect(self.setRenderer)
         refreshAction.triggered.connect(self.refresh)
@@ -126,7 +131,31 @@ class MainWindow(QtGui.QMainWindow):
         self.setCentralWidget(self.view)
         self.setWindowTitle("SVG Viewer")
 
+    def openDotFile(self, path=None):
+        if not path:
+            path = QtGui.QFileDialog.getOpenFileName(self, "Open Dot File",
+                    self.currentPath, "DOT files (*.dot)")
+
+        if path:
+            dot_file = QtCore.QFile(path)
+            if not dot_file.exists():
+                QtGui.QMessageBox.critical(self, "Open Dot File",
+                        "Could not open file '%s'." % path)
+
+                self.outlineAction.setEnabled(False)
+                self.backgroundAction.setEnabled(False)
+                return
+            self.dotPath = path
+            outputname = 'o.svg'
+            gvgen(path, outputname)
+            self.openSvgFile(outputname)
+
     def openFile(self, path=None):
+        #Opening SVG directly so there is no Dot graph file.
+        self.dotPath = None
+        self.openSvgFile(path)
+
+    def openSvgFile(self, path=None):
         if not path:
             path = QtGui.QFileDialog.getOpenFileName(self, "Open SVG File",
                     self.currentPath, "SVG files (*.svg *.svgz *.svg.gz)")
@@ -152,6 +181,8 @@ class MainWindow(QtGui.QMainWindow):
 
             self.resize(self.view.sizeHint() + QtCore.QSize(80, 80 + self.menuBar().height()))
 
+            return
+
     def setRenderer(self, action):
         if QtOpenGL.QGLFormat.hasOpenGL():
             self.highQualityAntialiasingAction.setEnabled(False)
@@ -166,7 +197,10 @@ class MainWindow(QtGui.QMainWindow):
             self.view.setRenderer(SvgView.Image)
     
     def refresh(self):
-        self.openFile(self.currentPath)
+        if self.dotPath is not None:
+            self.openDotFile(self.dotPath)
+        else:
+            self.openFile(self.currentPath)
 
 
 class SvgView(QtGui.QGraphicsView):
@@ -299,8 +333,10 @@ if __name__ == '__main__':
 
     window = MainWindow()
     if len(sys.argv) == 2:
-        window.openFile(sys.argv[1])
-    else:
-        window.openFile('s1.svg')
+        filePath = sys.argv[1]
+        if filePath.endswith('.dot'):
+            window.openDotFile(filePath)
+        else:
+            window.openFile(filePath)
     window.show()
     sys.exit(app.exec_())

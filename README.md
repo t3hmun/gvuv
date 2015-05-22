@@ -12,11 +12,11 @@ Its just an SVG viewer at the moment.
 
 1. SVG Viewer. [done]
 
-2. Refresh SVG shortcut.
+2. Refresh SVG shortcut. [done]
 
-3. Generate SVG from .dot file.
+3. Generate SVG from .dot file. [done]
 
-4. Generate + Refresh button.
+4. Generate + Refresh button (same button). [done]
 
 5. Watch .dot file for changes and auto-refresh.
 
