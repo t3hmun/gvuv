@@ -10,11 +10,15 @@ Its just an SVG viewer at the moment.
 
 ### Milestones
 
-SVG Viewer. [done]
-Refresh SVG shortcut.
-Generate SVG from .dot file.
-Generate + Refresh button.
-Watch .dot file for changes and auto-refresh.
+1. SVG Viewer. [done]
+
+2. Refresh SVG shortcut.
+
+3. Generate SVG from .dot file.
+
+4. Generate + Refresh button.
+
+5. Watch .dot file for changes and auto-refresh.
 
 ## Requirements
 
