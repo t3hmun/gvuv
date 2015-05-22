@@ -6,7 +6,8 @@ Create a graphviz viewer that updates as you save edits in a text editor.
 
 ## Status
 
-Its just an SVG viewer at the moment.
+* Graph generation and display: __working__.
+* Auto-refresh __not implemented__. User must press `View>Refresh` (`Ctrl-R`).
 
 ### Milestones
 
@@ -22,8 +23,11 @@ Its just an SVG viewer at the moment.
 
 ## Requirements
 
-Python with PyQt4 (only tested on python 3.4 Windows)
-Graphviz
+Python with PyQt4 (only tested in WinPython 3.4.2)
+
+Graphviz (either put its bin in path, or modify `dotpath` in `gvgen.py`)
+
+The graph file should have `.dot` as its extension.
 
 
 ## License
