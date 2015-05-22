@@ -4,7 +4,7 @@
 #############################################################################
 ##
 ##  Original file from: 'PyQt-win-gpl-4.11.3/examples/painting/svgviewer'.
-##  Editied by t3hmun to create an updating GraphViz viewer.
+##  Editied by t3hmun to create an updating Graphviz viewer.
 ##  Apply the 3 clause BSD license to my edits too please.
 ##
 #############################################################################
