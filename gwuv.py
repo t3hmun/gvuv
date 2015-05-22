@@ -3,6 +3,12 @@
 
 #############################################################################
 ##
+##  Original file from: 'PyQt-win-gpl-4.11.3/examples/painting/svgviewer'.
+##  Editied by t3hmun to create an updating GraphViz viewer.
+##  Apply the 3 clause BSD license to my edits too please.
+##
+#############################################################################
+##
 ## Copyright (C) 2010 Riverbank Computing Limited.
 ## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ## All rights reserved.
@@ -47,12 +53,6 @@ import sip
 sip.setapi('QString', 2)
 
 from PyQt4 import QtCore, QtGui, QtOpenGL, QtSvg
-
-try:
-    import svgviewer_rc3
-except ImportError:
-    import svgviewer_rc2
-
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -294,6 +294,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         window.openFile(sys.argv[1])
     else:
-        window.openFile(':/files/bubbles.svg')
+        window.openFile('o.svg')
     window.show()
     sys.exit(app.exec_())
