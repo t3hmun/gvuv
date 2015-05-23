@@ -122,6 +122,10 @@ class MainWindow(QtGui.QMainWindow):
 
         self.menuBar().addMenu(rendererMenu)
 
+        #Used to watch dot files for changes.
+        self.qtwatcher = QtCore.QFileSystemWatcher()
+        self.qtwatcher.fileChanged.connect(self.refresh)
+
         openAction.triggered.connect(self.openFile)
         openDotAction.triggered.connect(self.openDotFile)
         quitAction.triggered.connect(QtGui.qApp.quit)
@@ -145,6 +149,15 @@ class MainWindow(QtGui.QMainWindow):
                 self.outlineAction.setEnabled(False)
                 self.backgroundAction.setEnabled(False)
                 return
+
+            #Don't stop watching if we are refreshing the same file.
+            if self.dotPath is not None and self.dotPath != path:
+                self.qtwatcher.removePath(self.dotPath)
+            
+            #Adding same path twice leads to uneccessary console error spam.
+            if self.dotPath != path:
+                self.qtwatcher.addPath(path)
+            
             self.dotPath = path
             outputname = 'o.svg'
             gvgen(path, outputname)
@@ -152,6 +165,8 @@ class MainWindow(QtGui.QMainWindow):
 
     def openFile(self, path=None):
         #Opening SVG directly so there is no Dot graph file.
+        if(self.dotPath is not None):
+            self.qtwatcher.removePath(self.dotPath)
         self.dotPath = None
         self.openSvgFile(path)
 
