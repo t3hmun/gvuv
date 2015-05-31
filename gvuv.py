@@ -53,7 +53,12 @@ import sip
 sip.setapi('QString', 2)
 
 from PyQt4 import QtCore, QtGui, QtOpenGL, QtSvg
-from gvgen import gvgen
+from subprocess import call
+
+dotpath = 'dot.exe' #change this if graphviz is not in path.
+
+def gvgen(filename, outputname, dotpath = dotpath):
+	call(dotpath + ' -Tsvg ' + filename + ' -o ' + outputname)
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
