@@ -55,7 +55,13 @@ sip.setapi('QString', 2)
 from PyQt4 import QtCore, QtGui, QtOpenGL, QtSvg
 from subprocess import call
 
+###############################################################################
+## CONFIG
+###############################################################################
+defaultfile = 'test.dot'
 dotpath = 'dot.exe' #change this if graphviz is not in path.
+## END CONFIG
+
 
 def gvgen(filename, outputname, dotpath = dotpath):
 	call(dotpath + ' -Tsvg ' + filename + ' -o ' + outputname)
@@ -139,6 +145,9 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setCentralWidget(self.view)
         self.setWindowTitle("SVG Viewer")
+        
+        if defaultfile is not None:
+            self.openDotFile(defaultfile)
 
     def openDotFile(self, path=None):
         if not path:
