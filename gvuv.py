@@ -9,6 +9,7 @@
 ##
 #############################################################################
 ##
+## Copyright (C) 2015 Manish Parekh (t3hmun@gmail.com)
 ## Copyright (C) 2010 Riverbank Computing Limited.
 ## Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 ## All rights reserved.
@@ -56,15 +57,16 @@ from PyQt4 import QtCore, QtGui, QtOpenGL, QtSvg
 from subprocess import call
 
 ###############################################################################
-## CONFIG
+# CONFIG
 ###############################################################################
 defaultfile = 'test.dot'
-dotpath = 'dot.exe' #change this if graphviz is not in path.
-## END CONFIG
+dotpath = 'dot.exe'  # Change this if graphviz is not in path.
+# END CONFIG
 
 
-def gvgen(filename, outputname, dotpath = dotpath):
-	call(dotpath + ' -Tsvg ' + filename + ' -o ' + outputname)
+def gvgen(filename, outputname, dotpath=dotpath):
+    call(dotpath + ' -Tsvg ' + filename + ' -o ' + outputname)
+
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -145,11 +147,11 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setCentralWidget(self.view)
         self.setWindowTitle("SVG Viewer")
-        
+
         if defaultfile is not None:
             self.openDotFile(defaultfile)
 
-    def openDotFile(self, path=None):
+    def openDotFile(self, path=None, isNewFile = True):
         if not path:
             path = QtGui.QFileDialog.getOpenFileName(self, "Open Dot File",
                     self.currentPath, "DOT files (*.dot)")
@@ -167,15 +169,15 @@ class MainWindow(QtGui.QMainWindow):
             #Don't stop watching if we are refreshing the same file.
             if self.dotPath is not None and self.dotPath != path:
                 self.qtwatcher.removePath(self.dotPath)
-            
+
             #Adding same path twice leads to uneccessary console error spam.
             if self.dotPath != path:
                 self.qtwatcher.addPath(path)
-            
+
             self.dotPath = path
             outputname = 'o.svg'
             gvgen(path, outputname)
-            self.openSvgFile(outputname)
+            self.openSvgFile(outputname, isNewFile)
 
     def openFile(self, path=None):
         #Opening SVG directly so there is no Dot graph file.
@@ -184,7 +186,7 @@ class MainWindow(QtGui.QMainWindow):
         self.dotPath = None
         self.openSvgFile(path)
 
-    def openSvgFile(self, path=None):
+    def openSvgFile(self, path=None, isNewFile=True):
         if not path:
             path = QtGui.QFileDialog.getOpenFileName(self, "Open SVG File",
                     self.currentPath, "SVG files (*.svg *.svgz *.svg.gz)")
@@ -205,10 +207,10 @@ class MainWindow(QtGui.QMainWindow):
                 self.currentPath = path
                 self.setWindowTitle("%s - SVGViewer" % self.currentPath)
 
-            self.outlineAction.setEnabled(True)
-            self.backgroundAction.setEnabled(True)
-
-            self.resize(self.view.sizeHint() + QtCore.QSize(80, 80 + self.menuBar().height()))
+            if isNewFile is True:
+                self.outlineAction.setEnabled(True)
+                self.backgroundAction.setEnabled(True)
+                self.resize(self.view.sizeHint() + QtCore.QSize(80, 80 + self.menuBar().height()))
 
             return
 
@@ -224,12 +226,12 @@ class MainWindow(QtGui.QMainWindow):
                 self.view.setRenderer(SvgView.OpenGL)
         elif action == self.imageAction:
             self.view.setRenderer(SvgView.Image)
-    
+
     def refresh(self):
         if self.dotPath is not None:
-            self.openDotFile(self.dotPath)
+            self.openDotFile(self.dotPath, False)
         else:
-            self.openFile(self.currentPath)
+            self.openFile(self.currentPath, False)
 
 
 class SvgView(QtGui.QGraphicsView):
@@ -364,7 +366,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         filePath = sys.argv[1]
         if filePath.endswith('.dot'):
-            window.openDotFile(filePath)
+            window.openDotFile(filePath, True)
         else:
             window.openFile(filePath)
     window.show()
