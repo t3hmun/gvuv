@@ -201,7 +201,7 @@ class MainWindow(QtGui.QMainWindow):
                 self.backgroundAction.setEnabled(False)
                 return
 
-            self.view.openFile(svg_file)
+            self.view.openFile(svg_file, isNewFile)
 
             if not path.startswith(':/'):
                 self.currentPath = path
@@ -269,7 +269,7 @@ class SvgView(QtGui.QGraphicsView):
                 self.backgroundBrush().texture())
         p.restore()
 
-    def openFile(self, svg_file):
+    def openFile(self, svg_file, reset_scale=True):
         if not svg_file.exists():
             return
 
@@ -286,7 +286,8 @@ class SvgView(QtGui.QGraphicsView):
             drawOutline = True
 
         s.clear()
-        self.resetTransform()
+        if reset_scale:
+            self.resetTransform()
 
         self.svgItem = QtSvg.QGraphicsSvgItem(svg_file.fileName())
         self.svgItem.setFlags(QtGui.QGraphicsItem.ItemClipsToShape)
