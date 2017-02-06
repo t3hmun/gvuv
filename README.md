@@ -49,9 +49,11 @@ __All features working__.
 
 ## Requirements
 
-Python with PyQt4 (only tested in WinPython 3.4.2)
+Python with PyQt4 (tested in WinPython 3.4.2, [WinPython 64 3.5.2.3](https://github.com/winpython/winpython/releases/download/1.7.20161101/WinPython-64bit-3.5.2.3.exe) )
+__Update 01/2017:__ WinPython 3.5.2.3 seems to be the easiest way of getting a working Python with Qt4 on Windows.
 
-Graphviz (either put its bin in path, or modify `dotpath` in `gvgen.py`)
+Graphviz (either put its bin in path, or modify `dotpath` in `gvgen.py`).
+If Graphviz is not found a messy file not foun error will occur.
 
 The graph file should have `.dot` as its extension.
 
