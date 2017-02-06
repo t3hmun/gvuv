@@ -4,7 +4,7 @@
 
 A graphviz viewer that updates as you save edits in a text editor.
 
-Edit a graphwiz dot file in your favorite text editor (I use sublime, which has nice sytax highlighting), this app will display your graph and automatically refresh everytime you save your text file.
+Edit a graphviz dot file in your favorite text editor (I use sublime, which has nice sytax highlighting), this app will display your graph and automatically refresh everytime you save your text file.
 
 ![ScreenShot](screenshot.png)
 
